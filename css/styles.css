@@ -1,0 +1,514 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+h1,
+h2 {
+    color: #0056b3;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Allow items to wrap */
+    background-color: #2C2C2C;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #FF7518;
+    font-family: cursive;
+    /* Use cursive font-family */
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    margin-right: auto;
+    margin-left: 50%;
+}
+
+nav ul li {
+    margin-right: 15px;
+    position: relative;
+    /* Needed for dropdown positioning */
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+.dropdown {
+    display: none;
+    /* Initially hidden */
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    margin-top: 5px;
+    right: 0;
+    /* Align dropdown to the right side of the menu */
+}
+
+.dropdown a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    /* Required for positioning search icon */
+   
+    
+    /* Allow search container to grow */
+    margin-left: 40%;
+
+}
+
+/* New styles for the search box */
+.search-box {
+    width: 100%;
+    /* Set width to 100% to make it responsive */
+    max-width: 200px;
+    /* Max width for larger screens */
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 10px 20px;
+    /* Padding to accommodate the search icon */
+    outline: none;
+    transition: border-color 0.3s;
+    font-size: 16px;
+}
+
+.search-box:focus {
+    border-color: #0056b3;
+    /* Highlight border color on focus */
+}
+
+.search-icon {
+    margin-left: -30px;
+    /* Positioning the icon within the search box */
+    cursor: pointer;
+    /* Make the icon clickable */
+    color: #0056b3;
+    font-size: 20px;
+    /* Increase the font size for better visibility */
+    pointer-events: auto;
+    /* Ensure the icon can capture events */
+}
+
+.dark-mode-toggle,
+.notification-icon,
+.cart-icon {
+    cursor: pointer;
+    color: #fff;
+    margin-left: 15px;
+    font-size: 20px;
+    /* Increase icon size for better visibility */
+}
+
+
+.cart-icon i {
+    color: white;
+    /* Set the cart icon color to white */
+}
+
+.profile-container {
+    position: relative;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #FF7518;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    /* Initially hidden */
+    flex-direction: column;
+    cursor: pointer;
+
+}
+
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 3px 0;
+    left: 0;
+    transition: 0.4s;
+    /* Transition for smooth effect */
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+nav.dark-mode {
+    background-color: #444;
+}
+
+
+
+/* Medium devices (desktops, 768px and up) */
+@media (max-width: 1023px) {
+
+    nav h1 {
+        font-size: 30px;
+        /* Smaller logo text */
+        text-align: left;
+        margin-right: auto;
+    }
+
+    nav ul {
+        flex-direction: column;
+        /* Stack navigation items */
+        align-items: flex-start;
+        /* Align to start */
+        display: none;
+        /* Initially hide the menu */
+        position: absolute;
+        background-color: #0056b3;
+        width: 100%;
+        left: 0;
+        top: 50px;
+        /* Position below the nav bar */
+        z-index: 2;
+    }
+
+    nav.active ul {
+        display: flex;
+        /* Show menu when active */
+    }
+
+      /* Hide the search box on small screens */
+    
+
+    .hamburger {
+        background-color: green;
+        display: flex;
+        /* This shows the hamburger icon */
+        justify-content: flex-start;
+        /* Aligns content to the left */
+        margin-right: 2%;
+        align-items: left;
+        /* Vertically centers the content */
+    }
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1024px) and (max-width: 1300px) {
+    nav h1 {
+        font-size: 10px;
+        /* Slightly larger logo text */
+        color: black;
+    }
+
+
+    nav h1 {
+        font-size: 28px;
+        /* Larger logo text size */
+    }
+
+    nav ul {
+        margin-left: 4%;
+        margin-right: auto;
+    }
+
+  
+
+}
+
+.user-info {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.user-options {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.user-options ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.user-options li {
+    margin: 10px 0;
+}
+
+.user-options a {
+    text-decoration: none;
+    color: #4CAF50;
+    /* Change the color as needed */
+}
+
+
+
+/* General Styling */
+body, html {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+color: #333;
+}
+
+header {
+background-color: #ff6347;
+color: #fff;
+padding: 15px 20px;
+text-align: center;
+}
+
+main {
+padding: 20px;
+}
+
+/* Location and Filter Section Styling */
+.location-filter-section {
+background-color: #fff;
+padding: 15px 20px;
+border-bottom: 1px solid #ddd;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.location-search {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.location-icon {
+font-size: 1.2em;
+color: #ff6347; /* Color similar to the location pin */
+}
+
+.location-text {
+margin-left: 8px;
+font-size: .7em;
+color: #333;
+flex: 1;
+
+/* Ensure the text does not wrap */
+white-space: nowrap;  /* Prevents text from wrapping */
+overflow: hidden;     /* Hides overflow text */
+text-overflow: ellipsis; /* Optional: Adds ellipsis (...) for overflowed text */
+cursor: pointer; /* Change cursor to pointer on hover */
+position: relative; /* Position for absolute dropdown */
+}
+
+
+
+
+.search-icon {
+font-size: 1.2em;
+color: #333;
+cursor: pointer;
+}
+
+.filter-buttons {
+display: flex;
+justify-content: space-between;
+gap: 10px;
+display: flex; /* Use flexbox for layout */
+overflow-x: auto; /* Enable horizontal scrolling */
+overflow-y: hidden; /* Prevent vertical overflow */
+white-space: nowrap; /* Prevent line breaks */
+padding: 10px; /* Optional padding */
+border: 1px solid #ccc; /* Optional border for visualization */
+scrollbar-width: none; /* For Firefox */
+}
+
+.filter-buttons::-webkit-scrollbar {
+display: none; /* For Chrome, Safari, and Edge */
+}
+
+
+
+.filter-btn {
+background-color: #f4f4f4;
+border: 1px solid #ddd;
+border-radius: 20px;
+padding: 8px 16px;
+font-size: 0.9em;
+color: #333;
+cursor: pointer;
+transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-btn:hover {
+background-color: #ff6347;
+color: #fff;
+border-color: #ff6347;
+}
+
+
+
+/* Menu Category Styling */
+.menu-category {
+padding: 20px;
+}
+
+.menu-items-container {
+display: flex;
+flex-wrap: wrap; /* Allows items to wrap onto the next line */
+justify-content: space-between; /* Space out the items evenly */
+}
+
+.menu-item {
+flex: 0 1 calc(23% - 10px); /* Adjust the width to keep 4 items per row with a small gap */
+width: 250px; /* Fixed width to standardize the size of each card */
+height: 300px; /* Fixed height to keep all items consistent */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+margin-bottom: 20px; /* Space between rows */
+overflow: hidden;
+position: relative; /* Needed for absolute positioning of the button */
+transition: transform 0.3s;
+background-color: white; /* Changed to white to match a cleaner design */
+}
+
+
+.menu-item img {
+width: 100%;
+height: 50%; /* Maintain aspect ratio */
+}
+
+.item-info {
+padding: 10px;
+}
+
+.name-rating {
+display: flex; /* Use flexbox to align name and rating */
+justify-content: space-between; /* Space between name and rating */
+align-items: center; /* Center items vertically */
+margin-bottom: 5px; /* Space below the name-rating row */
+}
+.name-rating h3 {
+/* font-family: monospace; */
+/* font-family: sans-serif; */
+font-family: 'Montserrat', sans-serif;
+font-weight: 600;
+}
+
+.item-info h3 {
+margin: 0; /* Remove margin to align better */
+font-family: system-ui;
+}
+
+.rating {
+font-size: 1em; /* Adjusted size for prominence */
+}
+
+.description-price {
+display: flex; /* Use flexbox to align description and price */
+justify-content: space-between; /* Space between description and price */
+align-items: center; /* Center items vertically */
+margin-bottom: 5px; /* Space below this row */
+}
+
+.description-price p {
+margin: 0; /* Remove margin to align better */
+font-family: 'Montserrat', sans-serif;
+white-space: nowrap;  /* Prevents text from wrapping */
+overflow: hidden;     /* Hides overflow text */
+text-overflow: ellipsis; /* Optional: Adds ellipsis (...) for overflowed text */
+}
+
+.item-info .price {
+font-weight: bold; /* Bold for price */
+}
+
+.vegan-time {
+display: flex; /* Use flexbox to align vegan label and time */
+justify-content: space-between; /* Space between vegan and time */
+align-items: center; /* Center items vertically */
+}
+
+.vegan-time .time {
+font-size: 0.9em; /* Smaller font for time */
+}
+
+.item-info {
+padding: 10px;
+margin-bottom: 0; /* Remove any margin at the bottom */
+}
+
+
+
+.order-button {
+position: absolute;
+bottom: 5px; /* Adjust this value to control the gap from the bottom */
+right: 10px; /* Keep it at 10px from the right */
+background-color: #28a745; /* Green background */
+color: white; /* White text */
+border: none; /* No border */
+border-radius: 5px; /* Rounded corners */
+padding: 10px 15px; /* Padding */
+cursor: pointer; /* Pointer cursor on hover */
+transition: background-color 0.3s; /* Smooth transition */
+margin-top: 0; /* Set to 0 to eliminate top margin */
+}
+
+
+
+.order-button:hover {
+background-color: #218838; /* Darker green on hover */
+}
+
+.menu-item:hover {
+transform: scale(1.05); /* Slight zoom on hover */
+}
