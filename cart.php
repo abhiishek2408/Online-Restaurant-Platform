@@ -39,13 +39,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data['action']) && $data['ac
     exit(); // Stop further processing to handle the delete request only
 }
 
+// Fetch cart items for the logged-in user
+$userId = $_SESSION['user']['user_id']; // Assuming user ID is stored in the session
+$sql = "SELECT * FROM cart WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$cartItems = $result->fetch_all(MYSQLI_ASSOC);
+
+// Calculate subtotal
+$subtotal = 0;
+foreach ($cartItems as $item) {
+    $subtotal += $item['price'] * $item['quantity'];
+}
 
 $stmt->close();
+$conn->close();
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -54,140 +65,181 @@ $stmt->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cart</title>
     <style>
+        /* General reset and font */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-    font-family: Arial, sans-serif;
-    background-color: white;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    
-}
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
 
-.cart-container {
-    display: flex;
-    max-width: 1200px;
-    width: 100%;
-    gap: 20px;
-    background-color: yellow;
-}
+        /* Main container styling */
+        .cart-container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
 
+        /* Cart items section styling */
+        .cart-items {
+            flex: 3;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
 
-.cart-items {
-    background-color: yellow;
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-}
+        .cart-items h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
 
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
- .order-summary {
-    background-color: pink;
-    padding: 20px;
-    width: 50%;
-    border-radius: 10px;
-}
+        .item-image img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
 
-.cart-items {
-    flex: 3;
-}
+        .item-details {
+            flex: 1;
+            margin-left: 20px;
+        }
 
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #2a6779;
-    padding: 15px 0;
-}
+        .item-details h3 {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #333;
+        }
 
-.item-image img {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-}
+        .item-details p {
+            color: #777;
+            font-size: 0.9em;
+        }
 
-.item-details {
-    flex: 1;
-    margin-left: 20px;
-}
+        .item-quantity {
+            display: flex;
+            align-items: center;
+        }
 
-.item-quantity {
-    display: flex;
-    align-items: center;
-}
+        .quantity-btn {
+            background-color: #4b6a39;
+            color: #fff;
+            border: none;
+            padding: 5px;
+            width: 30px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 3px;
+            margin: 0 5px;
+            font-weight: bold;
+        }
 
-.quantity-btn {
-    background-color: #ff847c;
-    color: #fff;
-    border: none;
-    padding: 5px;
-    width: 30px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 3px;
-    margin: 0 5px;
-}
+        .item-total, .item-remove {
+            text-align: center;
+            color: #333;
+        }
 
-.item-total, .item-remove {
-    text-align: center;
-}
+        .remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #e74c3c;
+        }
 
-.remove-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #ff847c;
-}
+        /* Order summary styling */
+        .order-summary {
+            flex: 1;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-.order-summary {
-    flex: 1;
-    color: #ffffff;
-}
+        .order-summary h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
 
-.summary-item, .summary-total {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
+        .summary-item, .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #333;
+        }
 
-.checkout-btn {
-    width: 100%;
-    background-color: #ff847c;
-    color: #ffffff;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
+        .summary-total {
+            font-size: 1.2em;
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
 
-@keyframes jump {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); } /* Move up */
-    100% { transform: translateY(0); } /* Move back to original position */
-}
+        .checkout-btn {
+            width: 100%;
+            background-color: #4b6a39;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
 
-.jump-animation {
-    animation: jump 0.3s ease-in-out;
-}
+        /* Animation for delete button */
+        @keyframes jump {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
 
+        .jump-animation {
+            animation: jump 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body>
 <div class="cart-container">
 
+
     <div class="cart-items">
-        <h2>My cart</h2>
+        <h2>My Cart</h2>
         <?php foreach ($cartItems as $item): ?>
             <div class="cart-item">
                 <div class="item-image">
-                    <img src="<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
+                    <img src="<?php echo htmlspecialchars($item['item_image']); ?>" alt="<?php echo htmlspecialchars($item['item_name']); ?>">
                 </div>
                 <div class="item-details">
-                    <h3><?php echo htmlspecialchars($item['name']); ?></h3>
-                    <p><?php echo htmlspecialchars($item['description']); ?></p>
+                    <h3><?php echo htmlspecialchars($item['item_name']); ?></h3>
                     <p>$<?php echo number_format($item['price'], 2); ?></p>
+                    <p><?php echo htmlspecialchars($item['quantity']); ?></p>
                 </div>
                 <div class="item-quantity">
                     <button class="quantity-btn">-</button>
@@ -205,8 +257,9 @@ $stmt->close();
     </div>
     
 
+    <!-- Order Summary Section -->
     <div class="order-summary">
-        <h2>Order summary</h2>
+        <h2>Order Summary</h2>
         <div class="summary-item">
             <span>Subtotal</span>
             <span>$<?php echo number_format($subtotal, 2); ?></span>
@@ -225,17 +278,12 @@ $stmt->close();
 
 <script>
     function deleteCartItem(itemId) {
-        const button = event.target; // Get the clicked button
-
-        // Add the jump animation class to the button
+        const button = event.target;
         button.classList.add('jump-animation');
-
-        // Remove the animation class after the animation duration (300ms in this case)
         setTimeout(() => button.classList.remove('jump-animation'), 300);
 
-        // Confirm deletion
         if (confirm("Are you sure you want to delete this item from your cart?")) {
-            fetch('', { // Empty URL to send request to the same file
+            fetch('', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'delete', cart_id: itemId })
@@ -244,7 +292,7 @@ $stmt->close();
             .then(data => {
                 if (data.status === 'success') {
                     alert("Item deleted successfully!");
-                    location.reload(); // Refresh the page to reflect changes
+                    location.reload();
                 } else {
                     alert("Failed to delete item. Please try again.");
                 }

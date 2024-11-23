@@ -48,24 +48,29 @@ if (!$result) {
 $menuItems = array();
 
 echo "<style>
-        .menu-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+
+.menu-container {
+  display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    gap: 20px; /* Gap between the items */
+    justify-content: center; /* Center align the grid */
+    margin-top: 20px;
+
         }
-        .menu-item-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px;
-            width: calc(25% - 20px); 
-            box-sizing: border-box;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            transition: transform 0.2s;
-            position: relative;
-            cursor: pointer;
+
+ 
+
+
+    .menu-item-card {
+             background-color: white; /* White background for each card */
+    border: 1px solid #ccc;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05); /* Shadow around each card */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on hover */
         }
+    
         .menu-item-card:hover {
             transform: scale(1.02);
         }

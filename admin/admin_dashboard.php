@@ -388,7 +388,7 @@ main {
 
 .filter-btn {
     background-color: #f4f4f4;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 20px;
     padding: 8px 16px;
     font-size: 0.9em;

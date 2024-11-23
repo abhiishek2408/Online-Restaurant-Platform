@@ -135,6 +135,7 @@ session_start(); // Start the session
 
 
 
+
     <div class="booking-form-container">
     <?php if (isset($_SESSION['user'])): ?>
             <div class="user-info">
@@ -179,6 +180,11 @@ session_start(); // Start the session
                 </select>
 
             </div>
+
+            <div class="banner">
+            <!-- Ensure the image URL is correct -->
+            <img src="https://ideausher.com/wp-content/uploads/2020/06/event-booking-header.png" alt="Event Booking Banner">
+        </div>
             <!-- Time slot availability -->
             <p>Choose an available time slot:</p>
             <div id="time-slots">

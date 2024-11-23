@@ -15,14 +15,14 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #2C2C2C;
-            color: #FFFFFF;
+            background-color: #fff;
+            color: #000;
             line-height: 1.8;
         }
 
         .about-us {
             padding: 60px 20px;
-            background-color: #2C2C2C;
+            background-color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -31,11 +31,12 @@
         .about-container {
             max-width: 800px;
             padding: 40px;
-            background-color: #333333;
+            background-color: #fff;
             border: 1px solid #444444;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
             border-radius: 8px;
+            color: #000;
         }
 
         .about-container h1 {
@@ -52,7 +53,7 @@
         .about-container p {
             font-size: 1.1rem;
             margin-bottom: 20px;
-            color: #DDDDDD;
+            color: #000;
             text-align: justify;
         }
 
@@ -83,6 +84,7 @@
     </style>
 </head>
 <body>
+<?php include('Navbar.php'); ?>
     <section class="about-us" id="about">
     <div class="about-container">
     <h1>Welcome to Bistrofy</h1>
@@ -90,14 +92,22 @@
     <p>Our culinary team, inspired by global flavors and local ingredients, crafts every dish with passion and precision. Whether you're joining us for a casual meal or a special celebration, we strive to make each experience delightful and unforgettable.</p>
     <p class="about-highlight">Come experience the art of dining at Bistrofy. We can't wait to welcome you!</p>
     
-    <!-- Vision Section -->
+  
     <h2>Our Vision</h2>
     <p>At Bistrofy, our vision is to create a space where people can connect over exceptional food, fostering memories that last a lifetime. We aim to be the city's favorite gathering spot for food lovers and create an atmosphere of warmth and joy for all.</p>
 
-    <!-- Creator's Name Section -->
+
     <p><strong>Created by:</strong> Abhishek Yadav</p>
 </div>
 
     </section>
+
+    <?php include('Footer.php'); ?>
+    <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Your script that uses $ -->
+<script src="your-script.js"></script>
+
 </body>
 </html>

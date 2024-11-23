@@ -1,0 +1,8 @@
+ <?php if (isset($_SESSION['user'])): ?>
+            <div class="user-info">
+                <h3>Hello, <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</h3>
+                <p>You are logged in as a <?php echo htmlspecialchars($_SESSION['user']['role']); ?>.</p>
+            </div>
+        <?php else: ?>
+            <p>You are not logged in.</p>
+        <?php endif; ?>

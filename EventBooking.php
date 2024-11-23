@@ -3,17 +3,59 @@ session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+include('config/db.php');
 
+// Initialize variables for form data
+$first_name = $last_name = $email = $phone = $event_type = $event_date = $message = '';
+$error_message = '';
+$success_message = '';
 
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve data from form and session
+    $user_id = $_SESSION['user']['user_id'] ?? null; // Ensure user_id exists in session
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $event_type = $_POST['event_type'];
+    $event_date = $_POST['event_date'];
+    $message = $_POST['message'];
+    $state = 'active'; // Default state
+
+    // Debugging output - optional, can be removed in production
+    echo "User ID: $user_id<br>";
+    echo "First Name: $first_name<br>";
+    echo "Last Name: $last_name<br>";
+    echo "Email: $email<br>";
+    echo "Phone: $phone<br>";
+    echo "Event Type: $event_type<br>";
+    echo "Event Date: $event_date<br>";
+    echo "Message: $message<br>";
+    echo "State: $state<br>";
+
+    // Prepare and bind statement
+    $stmt = $conn->prepare("INSERT INTO occasion (user_id, first_name, last_name, email, phone, event_type, event_date, message, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+
+    // Bind parameters
+    $stmt->bind_param("issssssss", $user_id, $first_name, $last_name, $email, $phone, $event_type, $event_date, $message, $state);
+
+    // Execute statement
+    if ($stmt->execute()) {
+        $success_message = "New occasion recorded successfully.";
+    } else {
+        $error_message = "Error: " . $stmt->error; // Show error if execution fails
+    }
+
+    // Close statement and connection
+    $stmt->close();
+    $conn->close();
+}
 ?>
-
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,56 +63,45 @@ error_reporting(E_ALL);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Management System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
-
-
+    <title>Document</title>
     <style>
+        /* Importing the Roboto font family */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+        /* Global Styles */
 
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #fff;
-            color: #fff;
+            color: #000;
             transition: background-color 0.3s, color 0.3s;
         }
-
-
-        h1,
-        h2 {
-            color: #0056b3;
-        }
-
-
-
-
-
-
-
 
 
 
         .booking-form-container {
             width: 80%;
+            /* Centered layout */
             max-width: 600px;
+            /* Limit width for large screens */
             margin: 0 auto;
             padding: 30px;
+            /* Spacing inside the container */
             background-color: #ffffff;
+            /* White background */
             border-radius: 10px;
+            /* Rounded corners for modern design */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            /* Subtle shadow */
             text-align: center;
             display: none;
+            /* Visible by default for this example */
             opacity: 1;
+            /* Fully visible */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Smooth transitions */
             position: relative;
             z-index: 10;
         }
@@ -122,7 +153,7 @@ error_reporting(E_ALL);
             font-size: 1rem;
             border: 1px solid #000;
             margin-left: 10px;
-            color: #000;
+            color: grey;
             border-radius: 4px;
         }
 
@@ -132,8 +163,8 @@ error_reporting(E_ALL);
             padding: 10px;
             width: 20%;
             font-size: 1rem;
-            border: 1px solid #000;
-            color: #000;
+            border: 1px solid #ddd;
+            color: grey;
             border-radius: 4px;
             margin-left: 10px;
         }
@@ -149,7 +180,7 @@ error_reporting(E_ALL);
             margin: 5px;
             padding: 10px 20px;
             color: white;
-            border: 1px solid #fff;
+            border: 1px solid #000;
             border-radius: 5px;
             cursor: pointer;
             background-color: #ff6347;
@@ -222,12 +253,12 @@ error_reporting(E_ALL);
         .occasion-book-container {
             text-align: center;
             padding: 40px;
-            background-color: #ffffff;
+            background-color: #fff;
             border-radius: 10px;
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            display: none;
+
 
         }
 
@@ -366,17 +397,17 @@ error_reporting(E_ALL);
             margin: 0 auto;
             padding: 20px;
             box-sizing: border-box;
+            
         }
 
         /* Booking Form */
         .booking-form {
             display: none;
-            margin-top: 20px;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            /* Added depth */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+          
         }
 
         .booking-form input,
@@ -385,7 +416,7 @@ error_reporting(E_ALL);
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            border: 1px solid #ddd;
+            border: 1px solid #000;
             border-radius: 8px;
             font-size: 15px;
             box-sizing: border-box;
@@ -442,20 +473,30 @@ error_reporting(E_ALL);
             margin-top: 30px;
         }
 
+
         .additional-box {
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 25px;
             flex: 0 1 45%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             text-align: center;
-            transition: transform 0.3s ease;
-        }
+            transform: translateY(50px) scale(0.95); /* Start from a slightly smaller size and moved down */
+    opacity: 0; /* Start invisible */
+    animation: appear 0.6s ease-out forwards; /* Apply the animation */
+}
 
-        .additional-box:hover {
-            transform: translateY(-5px) scale(1.05);
-        }
+@keyframes appear {
+    from {
+        transform: translateY(50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
 
         .additional-box img {
             width: 100%;
@@ -514,25 +555,31 @@ error_reporting(E_ALL);
 
         /* Occasion Form */
         .occasion-form {
-            width: 60%;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-            /* Deeper shadow for modern effect */
-            margin: 0 auto;
-            text-align: center;
-            box-sizing: border-box;
-            border: 1px solid #ddd;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            /* Smooth transition for transform and shadow */
-        }
+    width: 60%;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    transform: translateY(50px) scale(0.95); /* Start from a slightly smaller size and moved down */
+    opacity: 0; /* Start invisible */
+    animation: appear 0.6s ease-out forwards; /* Apply the animation */
+}
 
-        /* Animation on hover */
-        .occasion-form:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
+@keyframes appear {
+    from {
+        transform: translateY(50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
 
         /* Optional: Add smooth transition to text color or other elements */
         .occasion-form h2 {
@@ -836,125 +883,119 @@ error_reporting(E_ALL);
             font-weight: 500;
             color: #ffffff;
         }
+
+        .success-message{
+            font-size: medium;
+            font-family: 'Roboto' sans-serif;
+            color: green;
+        }
     </style>
 </head>
 
 <body>
 
+<?php  include('Navbar.php'); ?>
 
-    <?php include('Navbar.php'); ?>
 
-    <?php include('FeatureSlide.php'); ?>
 
-    <section class="Bistrofy-container">
-        <main>
-            <h1 class="Bistrofy-header">Inspired by the rich heritage of Indian cuisine, Bistrofy offers a vibrant, contemporary twist on beloved traditional flavors.</h1>
-            <a href="TableBooking.php" class="Bistrofy-book-button">Book a Table</a>
-            <img src="dining1.jpg" class="Bistrofy-dining">
-        </main>
-    </section>
+    <div class="occasion-book-container" id="main-content">
+        <h1>Are you planning an event?</h1>
+        <p class="description">Explore our private dining experience. We offer various menus tailored to your occasion and budget, from corporate events to private gatherings.</p>
 
-    <div class="occasion-container">
-        <div class="occasion-image-section">
-            <img src="Occasion1.jpg" alt="Food image">
-        </div>
-        <div class="occasion-text-section">
-            <div class="occasion-icons">
-
+        <div class="service-content">
+            <div class="service-box">
+                <img src="corporateevent.jpg" alt="Corporate Events">
+                <h4>Corporate Events</h4>
+                <p>Professional catering services for your corporate needs, ensuring a successful event.</p>
             </div>
-            <h2>Your Perfect Destination for Any Occasion</h2>
-            <p class="occasion-description">I'm a paragraph. Click here to add your own text and edit me. I’m a great place for you to tell a story and let your users know a little more about you.</p>
-            <a href="EventBooking.php" class="occasion-button">Book Events</a>
-            <div class="occasion-contact-info">
-
-                <div style="display: flex; align-items: flex-start;">
-                    <strong style="margin-right: 10px; margin-top:5px">Address:</strong>
-                    <p style="margin-left: 86px;">500 Terry Francine Street<br>San Francisco, CA 94158</p>
-                </div>
-                <div style="display: flex; align-items: flex-start;">
-                    <strong style="margin-right: 10px;">Opening Hours:</strong>
-                    <p style="margin-left: 40px;">Mon - Fri : 8am - 8pm<br>Saturday : 9am - 7pm<br>Sunday : 9am - 8pm</p>
-                </div>
+            <div class="service-box">
+                <img src="privategathering.jpg" alt="Private Gatherings">
+                <h4>Private Gatherings</h4>
+                <p>Intimate catering solutions for personal celebrations and gatherings.</p>
+            </div>
+            <div class="service-box">
+                <img src="weedingevent.jpg" alt="Weddings">
+                <h4>Weddings</h4>
+                <p>Elegant catering services to make your wedding day unforgettable with exquisite cuisine.</p>
             </div>
         </div>
+
+        <a href="#" class="start-planning-button">Start Planning</a>
     </div>
 
 
-   
-    <?php include('TestimonialSection.php'); ?>
-    <?php include('Footer.php'); ?>
+
+    <div class="container booking-form" id="booking-form">
+
+        <h2 class="form-title">Book your Event</h2>
+
+        <div class="additional-boxes">
+            <div class="additional-box">
+                <img src="Eventpic.jpg" alt="Get in Touch">
+                <h4>Get in Touch</h4>
+                <p>Have questions? Reach out to our team for assistance.</p>
+            </div>
+
+           
 
 
+
+
+
+            <form id="form" method="POST" action="" class="occasion-form">
+                <h2 class="form-title">Get in Touch</h2>
+                <div class="form-row">
+                    <input type="text" name="first_name" placeholder="First Name*" required>
+                    <input type="text" name="last_name" placeholder="Last Name*" required>
+                </div>
+                <div class="form-row">
+                    <input type="email" name="email" placeholder="Email*" required>
+                    <input type="tel" name="phone" placeholder="Phone">
+                </div>
+                <div class="form-row">
+                    <select name="event_type" required>
+                        <option value="private">Private Event</option>
+                        <option value="corporate">Corporate Event</option>
+                    </select>
+                    <input type="date" name="event_date" required>
+                </div>
+                <textarea name="message" placeholder="Write a message" required></textarea>
+                <button type="submit">Submit</button>
+
+                <?php if (!empty($success_message)) : ?>
+                    <div class="success-message"><?php echo $success_message; ?></div>
+                <?php elseif (!empty($error_message)) : ?>
+                    <div class="error-message"><?php echo $error_message; ?></div>
+                <?php endif; ?>
+
+            </form>
+
+        </div>
+    </div>
+
+<?php include('Footer.php'); ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        
-        // Toggle dropdown for login button
-        const loginButton = document.querySelector('#loginButton');
-        const loginDropdown = document.querySelector('#loginDropdown');
-
-        loginButton.addEventListener('click', () => {
-            loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Hide dropdowns when clicking outside of them
-        document.addEventListener('click', (event) => {
-            if (!loginDropdown.contains(event.target) && !loginButton.contains(event.target)) {
-                loginDropdown.style.display = 'none';
-            }
-        });
-
-
-
-
-
-
-
         $(document).ready(function() {
-            $('#loginButton').click(function() {
-                $('#dropdown').show();
+            $('.start-planning-button').on('click', function(event) {
+                event.preventDefault();
+                $('.occasion-book-container').hide();
+                $('#testimonial').hide();
+
+                $('.booking-form').show();
+            });
+
+
+            $('#form').on('submit', function(event) {
+                event.preventDefault();
+                $.post('', $(this).serialize(), function(data) {
+                    alert("Your booking details have been submitted successfully!");
+                    $('#form')[0].reset();
+                    
+                });
             });
         });
-
-
-
-        // // script.js
-
-        // // Function to toggle the cart modal
-        // function toggleCart() {
-        //     const cartModal = document.getElementById("cartModal");
-        //     if (cartModal.style.display === "block") {
-        //         cartModal.style.display = "none";
-        //     } else {
-        //         cartModal.style.display = "block";
-        //         loadCartItems(); // Load cart items when opening the cart
-        //     }
-        // }
-
-        // // Function to load cart items from the server
-        // function loadCartItems() {
-        //     fetch('add_to_cart.php') // Change to your actual cart page URL
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             document.getElementById('cartContainer').innerHTML = data;
-        //         })
-        //         .catch(error => {
-        //             console.error('Error loading cart items:', error);
-        //         });
-        // }
-
-        // Close modal when clicking outside of it
-
-        // window.onclick = function(event) {
-        //     const modal = document.getElementById("cartModal");
-        //     if (event.target === modal) {
-        //         modal.style.display = "none";
-        //     }
-        // }
-
-
-      
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </body>
 
 </html>

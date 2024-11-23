@@ -7,14 +7,26 @@
     <title>Document</title>
 
     <style>
-        /* Location and Filter Section Styling */
+
+
+body {
+    background-color: #fff; 
+    font-family: 'Roboto', sans-serif;
+  
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+        
         .location-filter-section {
             background-color: #fff;
-            padding: 15px 20px;
-            border-bottom: 1px solid #ddd;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-bottom: 10px;
             
         }
 
@@ -51,74 +63,108 @@
 
 
 
-
-       
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            position: relative;
-            margin-left: 40%;
-
-        }
-
-
-        .search-box {
+        menu-content{
             width: 100%;
-            max-width: 900px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            padding: 10px 20px;
-            outline: none;
-            transition: border-color 0.3s;
-            font-size: 16px;
-        }
-
-        .search-box:focus {
-            border-color: #0056b3;
-        }
-
-        .search-icon {
-            margin-left: -30px;
-            cursor: pointer;
-            color: #0056b3;
-            font-size: 20px;
-            pointer-events: auto;
+            min-width: 1200px;
+            height: 100%;
+            background-color: #fff;
         }
 
 
         
 
-        .filter-buttons {
+        .menu-buttons {
             display: flex;
             justify-content: space-between;
             gap: 10px;
-            display: flex;
-            /* Use flexbox for layout */
-            overflow-x: auto;
-            /* Enable horizontal scrolling */
-            overflow-y: hidden;
-            /* Prevent vertical overflow */
-            white-space: nowrap;
-            /* Prevent line breaks */
-            padding: 10px;
-            /* Optional padding */
-            border: 1px solid #ccc;
-            /* Optional border for visualization */
-            scrollbar-width: none;
-            /* For Firefox */
+        
         }
 
-        .filter-buttons::-webkit-scrollbar {
-            display: none;
-            /* For Chrome, Safari, and Edge */
-        }
+
+    
+nav {
+    height: 75px; /* Adjust this value to your desired navbar height */
+    overflow: hidden; /* Ensures that the content inside doesn't overflow */
+    padding: 0; /* Remove extra padding, control it individually in children */
+    margin: 0; /* Remove default margin */
+    box-sizing: border-box; /* Makes sure padding/margin don't add to the height */
+}
+
+/* Ensure navbar items like links, buttons have no extra space */
+nav a, nav .navbar-item {
+    padding: 10px 15px; /* Control padding on navbar items individually */
+    margin: 0; /* Remove default margin */
+}
+
+/* Navbar dropdowns or icons - adjust size */
+nav .navbar-icon {
+    font-size: 1.5em; /* Adjust based on your needs */
+    padding: 0; /* Remove extra padding */
+}
+
+/* Other general styles for the page */
+.location-filter-section {
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.location-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.location-icon {
+    font-size: 1.2em;
+    color: #ff6347;
+}
+
+.location-text {
+    margin-left: 8px;
+    font-size: .7em;
+    color: #333;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Resetting global padding/margins that might interfere */
+
+
+/* Optional: Navbar content overrides */
+nav .menu-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Apply specific control for any container elements */
+.menu-content {
+    width: 100%;
+    min-width: 1200px;
+    height: 100%;
+    background-color: #fff;
+}
+
+/* Modifying the main content's padding */
+main {
+    background-color: #ccc;
+    
+}
+
+       
 
 
 
         .filter-btn {
             background-color: #f4f4f4;
-            border: 1px solid #ddd;
             border-radius: 20px;
             padding: 8px 16px;
             font-size: 0.9em;
@@ -272,7 +318,7 @@
 </head>
 
 <body>
-
+<?php include('Navbar.php'); ?>
 
     <main style="background-color: #ccc;">
 
@@ -285,38 +331,20 @@
                 </span>
 
 
-
-                <!-- <div class="search-container">
-                    <input type="text" class="search-box" placeholder="Search..." id="searchInput">
-                    <span class="search-icon" id="searchButton">🔍</span>
-                    <div class="message-box" id="messageBox"></div>
-                </div> -->
-
             </div>
 
-            <div class="filter-buttons">
+            <div class="menu-buttons">
                 
 
-                <button class="filter-btn" id="filter-menu-btn" onclick="openModal()">Filters</button>
-                <button class="filter-btn" id="Seasonal-Menu-btn">Seasonal Menu</button>
-                <button class="filter-btn" id="Special-Offers-Menu-btn">Offers</button>
-                <button class="filter-btn" id="alaCarte-Menu-btn">A La Carte Menu</button>
-                <button class="filter-btn" id="Prix-Fixe-Menu-btn">Prix Fixe Menu</button>
-                <button class="filter-btn" id="Tasting-Menu-btn">Tasting Menu</button>
-                <button class="filter-btn" id="Buffet-Menu-btn">Buffet Menu</button>
-                <button class="filter-btn" id="Specialty-Menu-btn">Specialty Menu</button>
-                <button class="filter-btn" id="Brunch-or-Happy-Hour-Menu-btn">Brunch</button>
-                <button class="filter-btn" id="EventCatering-Menu-btn">Chef's Specials</button>
-                <button class="filter-btn" id="Dietary-Specific-Menu-btn">Dietary-Specific Menu</button>
-                <button class="filter-btn" id="Event-or-Catering-Menu-btn">Event or Catering Menu</button>
+                 <button class="filter-btn" id="filter-menu-btn" onclick="openModal()"><i class="fas fa-sliders-h filter-icon" aria-hidden="true"></i> Show filters</button>
+        
             </div>
-
-        </section>
+        
 
         <section>
-            <div id="contentnew-container"></div>
+            <div class="menu-content" style="background-color: #fff;" id="contentnew-container"></div>
         </section>
-
+</section>
         <div id="filterModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -354,7 +382,9 @@
 
 </main>
 
-</body>
+<?php include('Footer.php'); ?>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     //fetch location
     function fetchLocation() {
@@ -460,55 +490,7 @@
     }
 
    
-    // function applyFilters() {
-    //     $(document).ready(function() {
-
-    //         $('#Seasonal-Menu-btn').click(function() {
-    //             $("#contentnew-container").load("customer/seasonalmenu.php");
-    //         });
-
-    //         $('#Special-Offers-Menu-btn').click(function() {
-    //             $("#contentnew-container").load("customer/Offers.php");
-    //         });
-    //         $('#alaCarte-Menu-btn').click(function() {
-    //             $("#contentnew-container").load("customer/alacarte.php");
-    //         });
-
-    //         $("#Prix-Fixe-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/PrixFixeMenu.php");
-    //         });
-
-    //         $("#Tasting-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/TastingMenu.php");
-    //         });
-
-    //         $("#Buffet-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/BuffetMenu.php");
-    //         });
-
-    //         $("#Specialty-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/SpecialtyMenu.php");
-    //         });
-
-    //         $("#Brunch-or-Happy-Hour-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/BrunchMenu.php");
-    //         });
-
-    //         $("#Chef-Specials-or-Daily-Specials-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("ChefSpecialMenu.php");
-    //         });
-
-    //         $("#Dietary-Specific-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/DietarySpecificMenu.php");
-    //         });
-    //         $("#EventCatering-Menu-btn").click(function() {
-    //             $("#contentnew-container").load("customer/EventCateringMenu.php");
-    //         });
-
-    //         $("#main-course-food").load("menuall4.php");
-    //     });
-    //     closeModal(); 
-    // }
+ 
 
 
     window.onclick = function(event) {
@@ -553,6 +535,6 @@
         };
     });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
 
 </html>

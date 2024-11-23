@@ -48,35 +48,42 @@ if (!$result) {
 $menuItems = array();
 
 echo "<style>
-        .menu-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+       .menu-container {
+  display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    gap: 20px; /* Gap between the items */
+    justify-content: center; /* Center align the grid */
+    margin-top: 20px;
+
         }
-        .menu-item-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px;
-            width: calc(25% - 20px); 
-            box-sizing: border-box;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            transition: transform 0.2s;
-            position: relative;
-            cursor: pointer;
+
+ 
+
+
+    .menu-item-card {
+             background-color: white; /* White background for each card */
+    border: 1px solid #ccc;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05); /* Shadow around each card */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on hover */
         }
         .menu-item-card:hover {
             transform: scale(1.02);
         }
         .image-container {
-            position: relative; 
-            text-align: center;
+               width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
+           width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    background-size: cover;
         }
         .name-rating {
             display: flex;
@@ -435,7 +442,7 @@ $conn->close();
 
 <script>
     // Load modal details
-    function loadDetail(id,name, image, price, rating, quantity, description, veganonvegan, time) {
+    function loadDetail(id, name, image, price, rating, quantity, description, veganonvegan, time) {
         document.getElementById('modalItemId').innerText = id;
         document.getElementById('modalItemName').innerText = name;
         document.getElementById('modalItemImage').src = 'data:image/jpeg;base64,' + image;
@@ -471,7 +478,7 @@ $conn->close();
             updateTotalPrice();
         }
     }
-    
+
 
     // Function to update total price
     function updateTotalPrice() {
@@ -480,35 +487,35 @@ $conn->close();
         document.getElementById('totalPrice').innerText = (unitPrice * quantity).toFixed(2);
     }
 
-   
+
 
     function addToCart() {
-    const itemImage = document.getElementById('modalItemImage').src;
-    const itemName = document.getElementById('modalItemName').innerText;
-    const itemPrice = parseFloat(document.getElementById('modalItemPrice').innerText);
-    const quantity = parseInt(document.getElementById('quantity').value);
-    const menuSectionId = document.getElementById('modalItemId').innerText; // Use modalItemId for the section ID
+        const itemImage = document.getElementById('modalItemImage').src;
+        const itemName = document.getElementById('modalItemName').innerText;
+        const itemPrice = parseFloat(document.getElementById('modalItemPrice').innerText);
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const menuSectionId = document.getElementById('modalItemId').innerText; // Use modalItemId for the section ID
 
-    const form = new FormData();
-    form.append('modalItemImage', itemImage);
-    form.append('modalItemName', itemName);
-    form.append('modalItemPrice', itemPrice);
-    form.append('quantity', quantity);
-    form.append('modalItemId', menuSectionId); // Send the menu section ID
-    form.append('add_to_cart', 'true');
+        const form = new FormData();
+        form.append('modalItemImage', itemImage);
+        form.append('modalItemName', itemName);
+        form.append('modalItemPrice', itemPrice);
+        form.append('quantity', quantity);
+        form.append('modalItemId', menuSectionId); // Send the menu section ID
+        form.append('add_to_cart', 'true');
 
-    fetch('add_to_cart.php', {
-        method: 'POST',
-        body: form,
-        credentials: 'same-origin', // Ensure session handling
-    })
-    .then(response => response.text()) // Read response as plain text
-    .then(data => {
-        alert(data); // Show the plain text response from the server
-        document.getElementById('detailsModal').style.display = 'none';
-    })
-    .catch(error => console.error('Error:', error));
-}
+        fetch('add_to_cart.php', {
+                method: 'POST',
+                body: form,
+                credentials: 'same-origin', // Ensure session handling
+            })
+            .then(response => response.text()) // Read response as plain text
+            .then(data => {
+                alert(data); // Show the plain text response from the server
+                document.getElementById('detailsModal').style.display = 'none';
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
 
 
