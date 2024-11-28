@@ -15,7 +15,6 @@ if (isset($_GET['delete'])) {
     $stmt->close();
 }
 
-// Query to fetch all users
 $query = "SELECT user_id, username, email, phone, address, bio, created_at, profile_img FROM users";
 $result = $conn->query($query);
 
@@ -35,11 +34,12 @@ $conn->close(); // Close the database connection
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Include FontAwesome -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #2C2C2C;
-            color: #FFFFFF;
+            background-color: #f0f4f8;
+            color: #000;
             margin: 0;
             padding: 0;
         }
@@ -47,43 +47,7 @@ $conn->close(); // Close the database connection
             color: #FF7518;
             text-align: center;
             margin-top: 20px;
-        
         }
-
-
-        
-        @keyframes containerFadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-  
-        @keyframes buttonBounce {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-
-            40% {
-                transform: translateY(-5px);
-            }
-
-            60% {
-                transform: translateY(-3px);
-            }
-        }
-
 
         table {
             width: 100%;
@@ -93,14 +57,12 @@ $conn->close(); // Close the database connection
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-            animation: containerFadeIn 0.8s ease-out forwards;
         }
 
         table:hover {
-           
-    transform: scale(1.02); /* Small scaling effect */
-   
-}
+            transform: scale(1.02); /* Small scaling effect */
+        }
+
         th, td {
             border: 1px solid #FF7518;
             padding: 10px;
@@ -110,52 +72,55 @@ $conn->close(); // Close the database connection
             background-color: #FF7518;
             color: white;
         }
+
         img {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            animation: buttonBounce 0.8s ease-out l;
         }
+
         .btn {
             padding: 5px 10px;
-            margin: 2px;
+            margin: 5px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: bold;
-            animation: buttonBounce 0.8s ease-out forwards;
+            font-weight: lighter;
+            font-size: 14px; /* Adjusted size for the icons */
+            
         }
+
         .update-btn {
-            background-color: #4CAF50; /* Green */
             color: white;
-            transition: background-color 0.3s;
-            animation: buttonBounce 0.8s ease-out forwards;
+            margin-top: 10%;
         }
-        .update-btn:hover {
-            background-color: #45a049;
-        }
+
+        
+
         .delete-btn {
-            background-color: #f44336; /* Red */
+            position: relative;
             color: white;
-            transition: background-color 0.3s;
+            margin-top: 20px;
         }
-        .delete-btn:hover {
-            background-color: #d32f2f;
-        }
+
+
         .alert {
             text-align: center;
             margin: 10px;
             padding: 10px;
             border-radius: 5px;
         }
+
         .alert.success {
             background-color: #4CAF50;
             color: white;
         }
+
         .alert.error {
             background-color: #f44336;
             color: white;
         }
+
         @media (max-width: 600px) {
             th, td {
                 font-size: 14px;
@@ -176,36 +141,36 @@ $conn->close(); // Close the database connection
             font-weight: 600;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
             position: fixed;
-            bottom: 20px; /* Positioned at the bottom */
-            left: 20px; /* Positioned on the left side */
+            bottom: 20px; 
+            left: 20px; 
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            opacity: 0.95;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            width: auto;
         }
 
-        /* Hover effect for subtle animation */
         .back-button:hover {
             background-color: #e06a15;
             color: #FFFFFF;
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            opacity: 1;
         }
 
-        /* Optional button text fade-in animation */
-        .back-button::after {
-            content: 'Back to Previous';
-            opacity: 1;
+        /* Hide the scrollbar */
+        .table-container {
+            overflow-x: auto;
+            -ms-overflow-style: none;  /* Hide scrollbar in Internet Explorer */
+            scrollbar-width: none;      /* Hide scrollbar in Firefox */
         }
+
+        .table-container::-webkit-scrollbar {
+            display: none;  /* Hide scrollbar in Chrome, Safari, and Opera */
+        }
+
+        /* Style for icons */
+        .btn i {
+            color: black;   /* Set icon color to black */
+            font-size: 16px; /* Adjust icon size */
+        }
+
     </style>
 </head>
 <body>
@@ -223,7 +188,7 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-<div style="overflow-x:auto;">
+<div class="table-container">
 <table>
     <thead>
         <tr>
@@ -257,8 +222,13 @@ if (isset($_SESSION['error'])) {
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="update_user.php?user_id=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn update-btn">Update</a>
-                        <a href="?delete=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                        <!-- Update and Delete buttons replaced with FontAwesome icons -->
+                        <a href="update_user.php?user_id=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn update-btn">
+                            <i class="fas fa-edit"></i> <!-- Update icon -->
+                        </a>
+                        <a href="?delete=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this user?');">
+                            <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
+                        </a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -271,6 +241,6 @@ if (isset($_SESSION['error'])) {
 </table>
 </div>
 
-<button class="back-button" onclick="history.back()">Back to Previous</button> 
+<?php include('../backtoprev.php')  ?>
 </body>
 </html>

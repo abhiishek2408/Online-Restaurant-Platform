@@ -882,6 +882,7 @@ error_reporting(E_ALL);
 
    
     <?php include('TestimonialSection.php'); ?>
+    <?php include('backtoprev.php'); ?>
     <?php include('Footer.php'); ?>
 
 

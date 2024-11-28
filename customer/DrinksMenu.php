@@ -48,52 +48,87 @@ if (!$result) {
 $menuItems = array();
 
 echo "<style>
-        .menu-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+
+
+html {
+    background-color: #fff; /* Light gray or any desired background color */
+}
+
+
+
+       .menu-container {
+  display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    gap: 20px; /* Gap between the items */
+    justify-content: center; /* Center align the grid */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color:#fff;
+    height:50%;
+
         }
-        .menu-item-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px;
-            width: calc(25% - 20px); 
-            box-sizing: border-box;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            transition: transform 0.2s;
-            position: relative;
-            cursor: pointer;
+
+ 
+
+
+    .menu-item-card {
+             background-color: white; /* White background for each card */
+    border: 1px solid #ccc;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05); /* Shadow around each card */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on hover */
         }
+
+
         .menu-item-card:hover {
             transform: scale(1.02);
         }
-        .image-container {
-            position: relative; 
-            text-align: center;
+
+         .image-container {
+               width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+
         img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
+           width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    background-size: cover;
         }
-        .name-rating {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0;
-        }
-        .price-time {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
-            color: grey;
-        }
-        .menu-item-card p {
-            color: grey;
-            margin: 5px 0;
-        }
+
+
+   .name-rating {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left */
+    gap: 5px; /* Add space between elements */
+    font-family: 'Roboto', sans-serif; /* Use a professional font */
+    padding: 10px; /* Optional padding for spacing */
+
+ 
+}
+
+
+    .name-rating h3 {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+  }
+
+  .name-rating p {
+    color: #000;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+  }
+
+       
         .food-type-heading {
             width: 100%;
             font-size: 1.5em;
@@ -312,9 +347,9 @@ echo "<style>
             margin: 0 -2px;
         }
     </style>";
-
+echo "<body>";
+    echo "<div class='food-type-heading'>Drinks Menu</div>";
 echo "<div class='menu-container'>";
-echo "<div class='food-type-heading'>Drinks Menu</div>";
 
 // Loop through the result set and fetch menu items
 while ($row = $result->fetch_assoc()) {
@@ -335,17 +370,15 @@ while ($row = $result->fetch_assoc()) {
             </div>
             <div class='name-rating'>
                 <h3>$itemName</h3>
-                <div class='rating'>$itemRating ⭐</div>
-            </div>
-            <div class='price-time'>
                 <p>Price: $$itemPrice</p>
                 <p>Time: $itemTime min</p>
             </div>
-            <p class='$veganClass'>$itemVegan</p>
+
           </div>";
 }
 
 echo "</div>";
+echo "</body>";
 
 // Modal HTML
 echo "<div id='detailsModal' class='modal'>
@@ -383,9 +416,7 @@ echo "<div id='detailsModal' class='modal'>
                     </div>
 
                     <p id='modalItemDescription'></p>
-    <label for='special-request'>Special Request</label>
-    <textarea type='text' id='special-request' placeholder='We’ll do our best to accommodate any requests when possible.'>
-    </textarea>
+  
 
                     <label for='quantity'>Quantity</label>
     <div class='quantity-selector'>

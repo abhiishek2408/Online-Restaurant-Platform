@@ -416,9 +416,7 @@ echo "<div id='detailsModal' class='modal'>
                     </div>
 
                     <p id='modalItemDescription'></p>
-    <label for='special-request'>Special Request</label>
-    <textarea type='text' id='special-request' placeholder='We’ll do our best to accommodate any requests when possible.'>
-    </textarea>
+  
 
                     <label for='quantity'>Quantity</label>
     <div class='quantity-selector'>
